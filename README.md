@@ -26,7 +26,7 @@ let gg2 = geos::Geometry::new_from_wkt("POLYGON ((1 1, 1 3, 5 5, 5 1, 1 1))")
 let gg3 = gg1.difference(&gg2).expect("difference failed");
 assert_eq!(
     gg3.to_wkt_precision(0).expect("to_wkt failed"),
-    "POLYGON ((0 0, 0 5, 6 6, 6 0, 0 0), (1 1, 5 1, 5 5, 1 3, 1 1))",
+    "POLYGON ((0 5, 6 6, 6 0, 0 0, 0 5), (5 1, 5 5, 1 3, 1 1, 5 1))",
 );
 ```
 
