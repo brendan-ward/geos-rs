@@ -89,11 +89,11 @@ pub trait Geom<'a>:
     /// ```
     /// use geos::{Geom, Geometry};
     ///
-    /// let geom = Geometry::new_from_wkt("POLYGON((0 0, 1 1, 1 2, 1 1, 0 0))")
+    /// let geom = Geometry::new_from_wkt("POLYGON((0 0, 2 2, 2 0, 0 2, 0 0))")
     ///                     .expect("Invalid geometry");
     /// assert_eq!(
     ///     geom.is_valid_reason(),
-    ///     Ok("Self-intersection[0 0]".to_owned()),
+    ///     Ok("Self-intersection[1 1]".to_owned()),
     /// );
     /// ```
     fn is_valid_reason(&self) -> GResult<String>;
@@ -616,7 +616,7 @@ pub trait Geom<'a>:
     ///
     /// assert_eq!(
     ///     union_geom.to_wkt_precision(1).unwrap(),
-    ///     "POLYGON ((0.0 0.0, 0.0 6.0, 10.0 6.0, 10.0 0.0, 0.0 0.0))",
+    ///     "POLYGON ((0.0 6.0, 10.0 6.0, 10.0 0.0, 0.0 0.0, 0.0 6.0))",
     /// );
     /// ```
     fn unary_union(&self) -> GResult<Geometry<'a>>;
@@ -627,21 +627,14 @@ pub trait Geom<'a>:
     /// ```
     /// use geos::{Geom, Geometry};
     ///
-    /// let input = Geometry::new_from_wkt("MULTIPOINT((100 200), (105 202), (110 200), (140 230),
-    ///                                                (210 240), (220 190), (170 170), (170 260),
-    ///                                                (213 245), (220 190))")
-    ///                   .expect("Invalid geometry");
-    /// let mut expected = Geometry::new_from_wkt(
-    ///     "GEOMETRYCOLLECTION(POLYGON ((-20 50, -20 380, -3.75 380, 105 235, 105 115, 77.14285714285714 50, -20 50)),\
-    ///                          POLYGON ((247 50, 77.14285714285714 50, 105 115, 145 195, 178.33333333333334 211.66666666666666, 183.51851851851853 208.7037037037037, 247 50)),\
-    ///                          POLYGON ((-3.75 380, 20.000000000000007 380, 176.66666666666666 223.33333333333334, 178.33333333333334 211.66666666666666, 145 195, 105 235, -3.75 380)),\
-    ///                          POLYGON ((105 115, 105 235, 145 195, 105 115)),\
-    ///                          POLYGON ((20.000000000000007 380, 255 380, 176.66666666666666 223.33333333333334, 20.000000000000007 380)),\
-    ///                          POLYGON ((255 380, 340 380, 340 240, 183.51851851851853 208.7037037037037, 178.33333333333334 211.66666666666666, 176.66666666666666 223.33333333333334, 255 380)),\
-    ///                          POLYGON ((340 240, 340 50, 247 50, 183.51851851851853 208.7037037037037, 340 240)))")
+    /// let input = Geometry::new_from_wkt("MULTIPOINT(2 2, 8 8)")
+    ///                                   .expect("Invalid geometry");
+    /// let mut expected = Geometry::new_from_wkt("GEOMETRYCOLLECTION (
+    ///         POLYGON ((-4 -4, -4 14, 14 -4, -4 -4)),
+    ///         POLYGON ((14 14, 14 -4, -4 14, 14 14)))")
     ///                             .expect("Invalid geometry");
     ///
-    /// let mut voronoi = input.voronoi(None::<&Geometry>, 6., false)
+    /// let mut voronoi = input.voronoi(None::<&Geometry>, 2., false)
     ///                        .expect("voronoi failed");
     ///
     /// expected.normalize().expect("normalize failed");
